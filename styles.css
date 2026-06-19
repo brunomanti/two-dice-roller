@@ -1,0 +1,175 @@
+:root {
+  color-scheme: dark;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #0b1020;
+  color: #f8fafc;
+}
+
+* { box-sizing: border-box; }
+
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  min-height: 100%;
+  background:
+    radial-gradient(circle at 20% 15%, rgba(59, 130, 246, 0.35), transparent 26rem),
+    radial-gradient(circle at 90% 5%, rgba(236, 72, 153, 0.26), transparent 23rem),
+    linear-gradient(145deg, #050816 0%, #111827 55%, #020617 100%);
+}
+
+button {
+  font: inherit;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.app {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  padding: max(18px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(22px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+}
+
+.card {
+  width: min(100%, 520px);
+  padding: clamp(22px, 6vw, 42px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: clamp(24px, 7vw, 42px);
+  background: rgba(15, 23, 42, 0.78);
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(18px);
+  text-align: center;
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  color: #93c5fd;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(2.6rem, 12vw, 5rem);
+  line-height: 0.95;
+  letter-spacing: -0.06em;
+}
+
+.subtitle {
+  margin: 16px auto 26px;
+  max-width: 36rem;
+  color: #cbd5e1;
+  font-size: clamp(1rem, 3.3vw, 1.08rem);
+  line-height: 1.5;
+}
+
+.dice-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(14px, 5vw, 28px);
+  margin: 0 auto 22px;
+}
+
+.die {
+  aspect-ratio: 1;
+  width: 100%;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: clamp(22px, 5vw, 34px);
+  background: linear-gradient(160deg, #ffffff, #dbeafe 55%, #bfdbfe);
+  color: #0f172a;
+  font-size: clamp(5rem, 28vw, 9.5rem);
+  line-height: 1;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.35), inset 0 4px 9px rgba(255, 255, 255, 0.9), inset 0 -8px 18px rgba(30, 64, 175, 0.2);
+  cursor: pointer;
+  transform: translateY(0) rotate(0deg);
+  transition: transform 170ms ease, box-shadow 170ms ease, filter 170ms ease;
+}
+
+.die:active, .die.rolling {
+  transform: translateY(4px) rotate(4deg) scale(0.98);
+  filter: brightness(1.05);
+}
+
+.die:focus-visible, .roll-button:focus-visible {
+  outline: 4px solid #fbbf24;
+  outline-offset: 5px;
+}
+
+.result-panel {
+  display: grid;
+  gap: 2px;
+  place-items: center;
+  margin: 0 auto 22px;
+  padding: 16px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.label, .combo, .hint {
+  color: #cbd5e1;
+}
+
+.label {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+#total {
+  font-size: clamp(3rem, 16vw, 5.8rem);
+  line-height: 1;
+}
+
+.combo { font-size: 1.05rem; }
+
+.roll-button {
+  width: 100%;
+  min-height: 60px;
+  border: 0;
+  border-radius: 999px;
+  color: #07111f;
+  background: linear-gradient(135deg, #facc15, #fb923c 52%, #f97316);
+  font-size: clamp(1.1rem, 4vw, 1.35rem);
+  font-weight: 900;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  box-shadow: 0 18px 38px rgba(249, 115, 22, 0.28), inset 0 2px 1px rgba(255, 255, 255, 0.55);
+  transition: transform 150ms ease, filter 150ms ease;
+}
+
+.roll-button:active { transform: translateY(2px); filter: brightness(1.05); }
+
+.hint {
+  margin: 14px 0 0;
+  font-size: 0.9rem;
+}
+
+kbd {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom-width: 3px;
+  border-radius: 7px;
+  padding: 1px 6px;
+  background: rgba(15, 23, 42, 0.9);
+  color: #f8fafc;
+}
+
+@media (max-width: 370px) {
+  .dice-row { gap: 10px; }
+  .card { padding: 18px; }
+  .hint { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
