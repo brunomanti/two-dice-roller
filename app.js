@@ -1,4 +1,12 @@
 const DICE_GLYPHS = ["⚀", "⚁", "⚂", "⚃", "⚄", "⚅"];
+const DICE_PIP_LAYOUTS = Object.freeze({
+  1: Object.freeze(["center"]),
+  2: Object.freeze(["top-left", "bottom-right"]),
+  3: Object.freeze(["top-left", "center", "bottom-right"]),
+  4: Object.freeze(["top-left", "top-right", "bottom-left", "bottom-right"]),
+  5: Object.freeze(["top-left", "top-right", "center", "bottom-left", "bottom-right"]),
+  6: Object.freeze(["top-left", "middle-left", "bottom-left", "top-right", "middle-right", "bottom-right"]),
+});
 const MIN_DICE = 1;
 const MAX_DICE = 10;
 const DEFAULT_DICE = 2;
@@ -40,6 +48,22 @@ function clampDiceCount(value) {
 
 function totalDice(values) {
   return values.reduce((sum, value) => sum + value, 0);
+}
+
+function normalizeDieValue(value) {
+  const numeric = Number(value);
+  if (!Number.isInteger(numeric) || numeric < 1 || numeric > 6) {
+    throw new RangeError(`Die value must be an integer from 1 to 6; received ${value}`);
+  }
+  return numeric;
+}
+
+function pipsForValue(value) {
+  return [...DICE_PIP_LAYOUTS[normalizeDieValue(value)]];
+}
+
+function dieGlyph(value) {
+  return DICE_GLYPHS[normalizeDieValue(value) - 1];
 }
 
 const MODES = {
@@ -107,27 +131,41 @@ class DiceApp {
 }
 
 function createDie(value, index, animate = false) {
+  const normalizedValue = normalizeDieValue(value);
   const die = document.createElement("button");
   die.type = "button";
   die.className = `die3d ${animate ? "rolling" : ""}`;
-  die.style.setProperty("--spin-x", `${720 + value * 33 + index * 19}deg`);
-  die.style.setProperty("--spin-y", `${900 + value * 41 + index * 29}deg`);
+  die.style.setProperty("--spin-x", `${720 + normalizedValue * 33 + index * 19}deg`);
+  die.style.setProperty("--spin-y", `${900 + normalizedValue * 41 + index * 29}deg`);
   die.style.setProperty("--delay", `${Math.min(index, 7) * 38}ms`);
-  die.dataset.value = String(value);
-  die.setAttribute("aria-label", `Die ${index + 1}: ${value}`);
+  die.dataset.value = String(normalizedValue);
+  die.setAttribute("aria-label", `Die ${index + 1}: ${normalizedValue}`);
 
   const cube = document.createElement("span");
   cube.className = "cube";
+  cube.setAttribute("aria-hidden", "true");
   [1, 2, 3, 4, 5, 6].forEach((faceValue) => {
     const face = document.createElement("span");
-    face.className = `face face-${faceValue} ${faceValue === value ? "active" : ""}`;
-    face.textContent = DICE_GLYPHS[faceValue - 1];
+    face.className = `face face-${faceValue}`;
     cube.append(face);
   });
+
+  const resultFace = document.createElement("span");
+  resultFace.className = `result-face value-${normalizedValue}`;
+  resultFace.dataset.visualValue = String(normalizedValue);
+  resultFace.setAttribute("aria-hidden", "true");
+  pipsForValue(normalizedValue).forEach((position) => {
+    const pip = document.createElement("span");
+    pip.className = `pip pip-${position}`;
+    pip.dataset.pip = position;
+    resultFace.append(pip);
+  });
+
   const badge = document.createElement("span");
   badge.className = "die-badge";
-  badge.textContent = String(value);
-  die.append(cube, badge);
+  badge.setAttribute("aria-hidden", "true");
+  badge.textContent = String(normalizedValue);
+  die.append(cube, resultFace, badge);
   return die;
 }
 
@@ -250,5 +288,5 @@ if (typeof document !== "undefined") {
 }
 
 if (typeof module !== "undefined") {
-  module.exports = { DICE_GLYPHS, MIN_DICE, MAX_DICE, DEFAULT_DICE, MODES, clampDiceCount, fairDieRoll, rollDice, rollPair, totalDice };
+  module.exports = { DICE_GLYPHS, DICE_PIP_LAYOUTS, MIN_DICE, MAX_DICE, DEFAULT_DICE, MODES, clampDiceCount, fairDieRoll, rollDice, rollPair, totalDice, normalizeDieValue, pipsForValue, dieGlyph, createDie };
 }

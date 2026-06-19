@@ -12,7 +12,19 @@ Each die uses `crypto.getRandomValues()` in browsers and rejection sampling over
 
 - `MODES.classic.roll(count)` returns the current roll result.
 - `MODES.classic.summarize(values)` formats the result.
+- `DICE_PIP_LAYOUTS` is the single source of truth for the visible pip layout for values 1–6.
+- `createDie(value, index)` renders one explicit result face whose `data-visual-value` and pip count must match the internal die value. The 3D cube shell is decorative and cannot display conflicting glyphs.
 - Future modes can add alternate roll/summarize behavior without changing the fairness primitive or UI shell.
+
+## Tests
+
+`node test.js` checks:
+
+- rejection-sampling fairness over the full accepted byte domain;
+- dice-count clamping and 1–10 configurable rolls;
+- total arithmetic and mode summaries;
+- exact pip positions for every die value;
+- DOM rendering invariants so the visible pips, `data-visual-value`, and internal `data-value` agree, and decorative 3D faces never show contradictory glyphs.
 
 ## Local use
 
