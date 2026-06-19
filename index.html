@@ -3,22 +3,30 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#111827" />
-    <meta name="description" content="A fair, responsive two-dice roller." />
-    <title>Two Dice Roller</title>
+    <meta name="theme-color" content="#09071a" />
+    <meta name="description" content="A fair, responsive, configurable 3D dice roller." />
+    <title>Neon Dice Roller</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
+    <canvas id="gl-stage" aria-hidden="true"></canvas>
     <main class="app" aria-labelledby="app-title">
-      <section class="card">
-        <p class="eyebrow">Fair random roller</p>
-        <h1 id="app-title">Two Dice</h1>
-        <p class="subtitle">Tap the button or either die. Rolls use cryptographic randomness with rejection sampling for unbiased 1–6 results.</p>
-
-        <div class="dice-row" aria-live="polite" aria-label="Dice results">
-          <button class="die" id="die-one" type="button" aria-label="Die one: 1" data-value="1">⚀</button>
-          <button class="die" id="die-two" type="button" aria-label="Die two: 1" data-value="1">⚀</button>
+      <section class="hero-card">
+        <div class="topline">
+          <p class="eyebrow">WebGL arcade mode</p>
+          <p class="mode-pill" id="mode-label">Classic dice</p>
         </div>
+        <h1 id="app-title">Neon Dice</h1>
+        <p class="subtitle">Material glass meets 80s vector arcade. Choose 1–10 dice, then roll mathematically fair six-sided dice with crypto randomness and rejection sampling.</p>
+
+        <section class="controls" aria-label="Dice controls">
+          <button class="stepper" id="decrease-dice" type="button" aria-label="Decrease dice count">−</button>
+          <div class="dice-count-readout">
+            <span id="dice-count">2</span>
+            <span>dice</span>
+          </div>
+          <button class="stepper" id="increase-dice" type="button" aria-label="Increase dice count">+</button>
+        </section>
 
         <div class="result-panel" aria-live="polite">
           <span class="label">Total</span>
@@ -26,9 +34,14 @@
           <span id="combo" class="combo">1 + 1</span>
         </div>
 
-        <button id="roll-button" class="roll-button" type="button">Roll dice</button>
+        <div id="dice-stage" class="dice-stage" aria-live="polite" aria-label="Dice results"></div>
 
-        <p class="hint">Keyboard: press <kbd>Space</kbd> or <kbd>Enter</kbd> on the roll button.</p>
+        <button id="roll-button" class="roll-button" type="button">
+          <span class="button-main">Roll the dice</span>
+          <span class="button-sub">tap dice or button</span>
+        </button>
+
+        <p class="hint">Built for future modes: classic roller today, extensible mode engine tomorrow.</p>
       </section>
     </main>
 
